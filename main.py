@@ -3,22 +3,19 @@
 #NOTE: FPT.so and Gkit.py files are included, but are ONLY needed if you intend to add graphics 
 
 def pop(tower_passed) :
-  
   this_tower = tower_passed[0]
   this_pointer = tower_passed[1]
   
   if(this_pointer == -1) :
     print("Error: Tower is empty")
-    return 0 
+    return None
     
-  else :
-    ring = this_tower[this_pointer]
-    this_tower[this_pointer] = -1
-    tower_passed[1] = this_pointer - 1
-    return ring
+  ring = this_tower[this_pointer]
+  this_tower[this_pointer] = -1
+  tower_passed[1] = this_pointer - 1
+  return ring
 
 def push(tower_passed,ring) :
-
   this_pointer = tower_passed[1]
   this_tower = tower_passed[0]
   
@@ -54,33 +51,21 @@ def display_towers(towers) :
     k = k - 1
   print("_______")
 
-def play_game(towers,sp,n,origin,aux,dest) :
-  if(n == 1) : 
+def play_game(towers,n,origin,aux,dest) :
+  if n == 1 : 
     ring = pop(origin)
     push(dest,ring)
     display_towers(towers) 
-    return 0 
+    return 
 
-  # Step 1
-  play_game(towers,sp,n-1,origin,aux,dest)
+  # reverse order of towers, aux - dest
+  play_game(towers,n-1,origin,dest,aux)
 
-  # Step 2
-  temp = dest
-  aux = dest
-  aux = temp 
-
-  # Step 3
   ring = pop(origin)
   push(dest,ring)
   display_towers(towers) 
 
-  # Step 4
-  temp = aux
-  origin = aux
-  origin = temp 
-
-  # Step 5
-  return play_game(towers,sp,n-1,origin,aux,dest)
+  play_game(towers,n-1,aux,origin,dest)
 
 #########  main
 def main() : 
@@ -98,7 +83,7 @@ def main() :
   dest = [towers[2],sp[2]]
 
   display_towers(towers)
-  play_game(towers,sp,n,origin,aux,dest)
+  play_game(towers,n,origin,aux,dest)
   display_towers(towers) # display function
   print("We are done! Yay!") # Need to display again after this
 
