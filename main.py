@@ -2,37 +2,33 @@
 #Assignment Towers of Hanoi (you may work alone or in a pair) 
 #NOTE: FPT.so and Gkit.py files are included, but are ONLY needed if you intend to add graphics 
 
-def pop(tower,sp) :
-  if(tower[sp] == -1) :
+def pop(tower_passed) :
+  
+  this_tower = tower_passed[0]
+  this_pointer = tower_passed[1]
+  
+  if(this_pointer == -1) :
     print("Error: Tower is empty")
     return 0 
-  ring = tower[sp]
-  tower[sp] = -1
-  sp = sp -1
-  return ring
+    
+  else :
+    ring = this_tower[this_pointer]
+    this_tower[this_pointer] = -1
+    tower_passed[1] = this_pointer - 1
+    return ring
 
-def push(tower,sp,ring) :
-  if(sp == 4) :
+def push(tower_passed,ring) :
+
+  this_pointer = tower_passed[1]
+  this_tower = tower_passed[0]
+  
+  if(this_pointer == 4) :
     print("Error: Tower is full!")
   else:
-    sp = sp + 1
-    if(tower[sp] == -1) :
-      tower[sp] = ring
-    else:
-      print("Whoops!! Somethings already here!")
-      return 0
-
-
-def towers_of_hanoi() :
-  towers = [-1,-1,-1]
-  towers[0] = [4,3,2,1,0]  # tower 0
-  towers[1] = [-1,-1,-1,-1,-1]  # tower 1
-  towers[2] = [-1,-1,-1,-1,-1]  # tower 2
-  sp = [4,-1,-1]  # stack pointers for each tower
-  return towers
-
-
-  
+    tower_passed[1] += 1 
+    this_pointer += 1
+    this_tower[this_pointer] = ring
+    print("Ring", ring, "pushed onto tower.")
 
 ########## display towers
 def display_towers(towers) :
@@ -58,16 +54,53 @@ def display_towers(towers) :
     k = k - 1
   print("_______")
 
+def play_game(towers,sp,n,origin,aux,dest) :
+  if(n == 1) : 
+    ring = pop(origin)
+    push(dest,ring)
+    display_towers(towers) 
+    return 0 
+
+  # Step 1
+  play_game(towers,sp,n-1,origin,aux,dest)
+
+  # Step 2
+  temp = dest
+  aux = dest
+  aux = temp 
+
+  # Step 3
+  ring = pop(origin)
+  push(dest,ring)
+  display_towers(towers) 
+
+  # Step 4
+  temp = aux
+  origin = aux
+  origin = temp 
+
+  # Step 5
+  return play_game(towers,sp,n-1,origin,aux,dest)
 
 #########  main
-# Example using a 5-ring tower
-
 def main() : 
 
-  towers = towers_of_hanoi()
-  display_towers(towers) # display function
-  print("Hit -enter- key to continue") # Need to display again after this
+  # Example using a 5-ring tower
+  towers = [-1,-1,-1]
+  towers[0] = [4,3,2,1,0]  # tower 0
+  towers[1] = [-1,-1,-1,-1,-1]  # tower 1
+  towers[2] = [-1,-1,-1,-1,-1]  # tower 2
+  sp = [4,-1,-1]  # stack pointers for each tower
 
+  n = len(towers[0])
+  origin = [towers[0],sp[0]]
+  aux = [towers[1],sp[1]]
+  dest = [towers[2],sp[2]]
+
+  display_towers(towers)
+  play_game(towers,sp,n,origin,aux,dest)
+  display_towers(towers) # display function
+  print("We are done! Yay!") # Need to display again after this
 
 if __name__ == "__main__":
   main()
