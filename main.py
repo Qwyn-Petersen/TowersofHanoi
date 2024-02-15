@@ -67,6 +67,33 @@ def play_game(towers,n,origin,aux,dest) :
 
   play_game(towers,n-1,aux,origin,dest)
 
+'''
+def play_game(towers,n,origin,aux,dest) :
+  if n == 1 : 
+    ring = pop(origin)
+    push(dest,ring)
+    display_towers(towers) 
+    return 
+
+  # Why doesn't this work?
+  temp = dest
+  aux = dest
+  aux = temp 
+
+  #play_game(towers,n-1,origin,aux,dest)
+
+  ring = pop(origin)
+  push(dest,ring)
+  display_towers(towers) 
+
+  # Why doesn't this work? 
+  temp = aux
+  origin = aux
+  origin = temp 
+
+  play_game(towers,n-1,aux,origin,dest)
+'''
+
 #########  main
 def main() : 
 
