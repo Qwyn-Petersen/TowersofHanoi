@@ -19,13 +19,11 @@ def push(tower_passed,ring) :
   this_pointer = tower_passed[1]
   this_tower = tower_passed[0]
   
-  if(this_pointer == 4) :
-    print("Error: Tower is full!")
-  else:
-    tower_passed[1] += 1 
-    this_pointer += 1
-    this_tower[this_pointer] = ring
-    print("Ring", ring, "pushed onto tower.")
+  
+  tower_passed[1] += 1 
+  this_pointer += 1
+  this_tower[this_pointer] = ring
+  print("Ring", ring, "pushed")
 
 ########## display towers
 def display_towers(towers) :
@@ -50,7 +48,8 @@ def display_towers(towers) :
     print()
     k = k - 1
   print("_______")
-
+  print(input("Hit -enter- key to continue"))
+  
 def play_game(towers,n,origin,aux,dest) :
   if n == 1 : 
     ring = pop(origin)
@@ -75,34 +74,52 @@ def play_game(towers,n,origin,aux,dest) :
     display_towers(towers) 
     return 
 
-  # Why doesn't this work?
   temp = dest
-  aux = dest
+  dest = aux
   aux = temp 
 
-  #play_game(towers,n-1,origin,aux,dest)
+  play_game(towers,n-1,origin,aux,dest)
 
   ring = pop(origin)
   push(dest,ring)
   display_towers(towers) 
 
-  # Why doesn't this work? 
   temp = aux
-  origin = aux
+  aux = origin
   origin = temp 
 
   play_game(towers,n-1,aux,origin,dest)
 '''
+def populate_towers(towers,n) :
+
+  val = n-1 #Becaus the display funciton is adding 1 
+
+  for i in range(len(towers)) : 
+      for j in range(n) :
+        if i == 0: 
+          towers[i].append(val)
+          val -= 1 
+        else: 
+          towers[i].append(-1)
 
 #########  main
 def main() : 
-
-  # Example using a 5-ring tower
+  
+  n = int(input("Enter number of rings: "))
+ 
   towers = [-1,-1,-1]
+  towers[0] = []
+  towers[1] = []
+  towers[2] = []
+  sp = [n-1,-1,-1]  # stack pointers for each tower
+
+  populate_towers(towers,n) 
+  
+  '''
   towers[0] = [4,3,2,1,0]  # tower 0
   towers[1] = [-1,-1,-1,-1,-1]  # tower 1
   towers[2] = [-1,-1,-1,-1,-1]  # tower 2
-  sp = [4,-1,-1]  # stack pointers for each tower
+  '''
 
   n = len(towers[0])
   origin = [towers[0],sp[0]]
@@ -110,8 +127,9 @@ def main() :
   dest = [towers[2],sp[2]]
 
   display_towers(towers)
+  
   play_game(towers,n,origin,aux,dest)
-  display_towers(towers) # display function
+  
   print("We are done! Yay!") # Need to display again after this
 
 if __name__ == "__main__":
